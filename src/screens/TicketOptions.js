@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {weekdays} from '../utils/Logic';
+import PrimaryButton from '../components/PrimaryButton';
 import StartTimeSchema from '../data/StartTimeSchema';
 
 const TicketOptions = () => {
@@ -38,7 +39,6 @@ const TicketOptions = () => {
           justifyContent: 'space-around',
         }}
       />
-
       <FlatList
         data={StartTimeSchema ? StartTimeSchema : []}
         renderItem={({item}) => (
@@ -56,6 +56,12 @@ const TicketOptions = () => {
           </View>
         )}
       />
+      <View style={{marginBottom: 16}}>
+        <PrimaryButton
+          value={'Buy ticket'}
+          onPress={() => uNavigation.navigate('Seat')}
+        />
+      </View>
     </View>
   );
 };
