@@ -3,7 +3,7 @@ import {Pressable, StyleSheet, View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
-import PrimaryButton from '../components/PrimaryButton';
+import Price from '../components/Price';
 
 const generateSeat = () => {
   let array = [];
@@ -82,15 +82,11 @@ const Seats = () => {
           <Text style={Styles.text}>Reserved</Text>
         </View>
       </View>
-      <View style={Styles.footer}>
-        <View style={Styles.price}>
-          <Text style={{color: '#000000'}}>Price</Text>
-          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 24}}>
-            75000 VND
-          </Text>
-        </View>
-        <PrimaryButton customStyle={Styles.button} value={'Buy now'} />
-      </View>
+      <Price
+        price={'75000'}
+        titleButton={'Buy now'}
+        onPress={() => uNavigation.navigate('ComboOptions')}
+      />
     </View>
   );
 };
@@ -129,23 +125,6 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 16,
-  },
-  footer: {
-    height: 100,
-    backgroundColor: '#FFFFFF',
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    left: 0,
-    borderTopStartRadius: 32,
-    borderTopEndRadius: 32,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-  },
-  button: {
-    width: 160,
-    marginHorizontal: 0,
   },
 });
 
