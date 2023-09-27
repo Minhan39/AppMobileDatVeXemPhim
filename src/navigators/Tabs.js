@@ -17,7 +17,7 @@ export default Tabs = () => {
         tabBarActiveTintColor: '#FFFFFF',
         tabBarStyle: {backgroundColor: '#23232e', borderTopWidth: 0},
       }}
-      initialRouteName={'Home'}>
+      initialRouteName={'Tickets'}>
       <Tab.Screen
         name={'Home'}
         component={HomeScreen}
