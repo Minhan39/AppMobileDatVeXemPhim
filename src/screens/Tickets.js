@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Dimensions,
   FlatList,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,7 +23,9 @@ const Tickets = () => {
       <FlatList
         data={movies}
         renderItem={({item}) => (
-          <View style={Styles.ticket}>
+          <Pressable
+            style={Styles.ticket}
+            onPress={() => unavigation.navigate('TicketDetail')}>
             <ImageBackground
               source={item.src}
               style={Styles.image}
@@ -54,7 +57,7 @@ const Tickets = () => {
                 đ
               </Text>
             </View>
-          </View>
+          </Pressable>
         )}
         keyExtractor={item => item.id}
       />
