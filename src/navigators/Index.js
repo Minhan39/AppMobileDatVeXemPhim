@@ -12,6 +12,7 @@ import MovieListScreen from '../screens/MovieList';
 import CategoryScreen from '../screens/Category';
 import SeatsScreen from '../screens/Seats';
 import ComboOptionsScreen from '../screens/ComboOptions';
+import TicketDetailScreen from '../screens/TicketDetail';
 
 const Stack = createStackNavigator();
 export default Root = () => {
@@ -30,6 +31,7 @@ export default Root = () => {
         <Stack.Screen name={'Category'} component={CategoryScreen} />
         <Stack.Screen name={'Seat'} component={SeatsScreen} />
         <Stack.Screen name={'ComboOptions'} component={ComboOptionsScreen} />
+        <Stack.Screen name={'TicketDetail'} component={TicketDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
