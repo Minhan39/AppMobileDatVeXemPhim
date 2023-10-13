@@ -1,32 +1,27 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {useTheme} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import TicketOptionsScreen from '../screens/TicketOptions';
 import CinemaOptionsScreen from '../screens/CinemaOptions';
 
-const Option = createBottomTabNavigator();
+const Option = createMaterialBottomTabNavigator();
 export default Options = () => {
   return (
     <Option.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: true,
-        tabBarActiveTintColor: '#FFFFFF',
-        tabBarStyle: {backgroundColor: '#23232e', borderTopWidth: 0},
-      }}
+      activeColor="#FFFFFF"
+      inactiveColor="#686D76"
+      barStyle={{backgroundColor: '#23232e'}}
+      shifting={true}
       initialRouteName={'TicketOptions'}>
       <Option.Screen
         name={'TicketOptions'}
         component={TicketOptionsScreen}
         options={{
           tabBarLabel: 'Recommend',
-          tabBarIcon: ({focused, color}) => (
-            <FontAwesome
-              name={'calendar'}
-              size={24}
-              color={focused ? color : '#686D76'}
-            />
+          tabBarIcon: ({color}) => (
+            <FontAwesome name={'calendar'} size={24} color={color} />
           ),
         }}
       />
@@ -35,12 +30,8 @@ export default Options = () => {
         component={CinemaOptionsScreen}
         options={{
           tabBarLabel: 'Cinemas',
-          tabBarIcon: ({focused, color}) => (
-            <MaterialCommunityIcons
-              name={'theater'}
-              size={24}
-              color={focused ? color : '#686D76'}
-            />
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name={'theater'} size={24} color={color} />
           ),
         }}
       />

@@ -147,7 +147,7 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingVertical: 8,
   },
   category: {
     alignItems: 'center',
@@ -156,7 +156,7 @@ const Styles = StyleSheet.create({
     width: 72,
     height: 72,
     backgroundColor: 'rgba(196, 196, 196, 0.07)',
-    marginLeft: 16,
+    marginLeft: 8,
   },
   slide: {
     width: 272,

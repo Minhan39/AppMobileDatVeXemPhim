@@ -58,6 +58,8 @@ const TicketDetail = () => {
             borderRadius: 8,
           }}>
           <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 0, y: 1}}
             colors={['rgba(9, 140, 208, 1)', 'rgba(9, 140, 208, 0)']}
             style={Styles.image}></LinearGradient>
           <View style={Styles.circle1}></View>
