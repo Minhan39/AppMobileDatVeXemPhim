@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,15 +6,33 @@ import {
   Dimensions,
   FlatList,
   Pressable,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../components/Header';
-import {categories} from '../data/CategoriesSchema';
 
 const {width, height} = Dimensions.get('screen');
 
 const Category = () => {
   const uNavigation = useNavigation();
+  const [categories, setCategories] = useState([]);
+
+  const getMoviesFromApi = () => {
+    return fetch('https://5259-115-75-187-3.ngrok-free.app/api/categories')
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    setTimeout(async () => {
+      setCategories(await getMoviesFromApi());
+    }, 1000);
+  });
 
   return (
     <View style={Styles.container}>
@@ -26,9 +44,16 @@ const Category = () => {
             style={Styles.category}
             onPress={() => uNavigation.navigate('MovieList')}>
             <View style={Styles.icon}>
-              <Text style={{color: '#FFFFFF'}}>{item.icon}</Text>
+              {item.image == '' ? (
+                <></>
+              ) : (
+                <Image
+                  source={{uri: item.image}}
+                  style={{width: 48, height: 48}}
+                />
+              )}
             </View>
-            <Text style={Styles.name}>{item.title}</Text>
+            <Text style={Styles.name}>{item.name}</Text>
           </Pressable>
         )}
         keyExtractor={item => item.id}
@@ -52,7 +77,7 @@ const Styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: width / 16,
   },
   icon: {
     backgroundColor: '#171723',

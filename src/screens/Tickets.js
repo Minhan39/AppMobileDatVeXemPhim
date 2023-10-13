@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Header from '../components/Header';
 import {movies} from '../data/MoviesSchema';
 
@@ -31,7 +32,7 @@ const Tickets = () => {
               style={Styles.image}
               imageStyle={{borderRadius: 8}}>
               <LinearGradient
-                start={{x: 0, y: 0}}
+                start={{x: 0.5, y: 0}}
                 end={{x: 1, y: 0}}
                 colors={['rgba(9, 140, 208, 0)', 'rgba(9, 140, 208, 1)']}
                 style={Styles.linear}></LinearGradient>
@@ -45,9 +46,13 @@ const Tickets = () => {
                 justifyContent: 'space-evenly',
               }}>
               <View>
-                <Text style={Styles.text}>Cinema: {item.cinema}</Text>
+                <Text style={Styles.text}>
+                  <FontAwesome name="map-marker" size={16} color={'#FFFFFF'} />{' '}
+                  {item.cinema}
+                </Text>
                 <Text style={[Styles.text, {fontSize: 12}]}>
-                  Show {item.time}
+                  <FontAwesome name="calendar" size={12} color={'#FFFFFF'} />{' '}
+                  {item.time}
                 </Text>
               </View>
               <Text style={Styles.text}>
@@ -72,9 +77,9 @@ const Styles = StyleSheet.create({
   },
   ticket: {
     flexDirection: 'row',
-    width: width - 16,
+    width: width - 32,
     backgroundColor: '#098CD0',
-    marginHorizontal: 8,
+    marginHorizontal: 16,
     justifyContent: 'space-between',
     paddingRight: 16,
     borderRadius: 8,
@@ -82,10 +87,10 @@ const Styles = StyleSheet.create({
   },
   image: {
     height: 96,
-    width: 176,
+    width: 150,
   },
   linear: {
-    width: 176,
+    width: 150,
     height: 96,
   },
   text: {
@@ -98,7 +103,7 @@ const Styles = StyleSheet.create({
     width: 32,
     borderRadius: 16,
     position: 'absolute',
-    top: -16,
+    top: -18,
     left: 48,
   },
   circle2: {
@@ -107,7 +112,7 @@ const Styles = StyleSheet.create({
     width: 32,
     borderRadius: 16,
     position: 'absolute',
-    bottom: -16,
+    bottom: -18,
     left: 48,
   },
   line: {
