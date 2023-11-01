@@ -74,7 +74,7 @@ const ComboOptions = () => {
         )}
         keyExtractor={item => item.id}
       />
-      <Price price={'75000'} titleButton={'Checkout'} />
+      <Price price={'75000'} titleButton={'Checkout'} onPress={() => uNavigation.navigate('Payment')}/>
     </View>
   );
 };

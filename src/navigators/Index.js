@@ -21,7 +21,7 @@ export default Root = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={'Category'}>
+        initialRouteName={'Tabs'}>
         <Stack.Screen name={'Tabs'} component={Tabs} />
         <Stack.Screen name={'Options'} component={Options} />
         <Stack.Screen name={'Login'} component={LoginScreen} />
