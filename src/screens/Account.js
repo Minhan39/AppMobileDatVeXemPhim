@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Account = () => {
+  const uNavigation = useNavigation();
   return (
     <View style={Styles.container}>
       <View style={Styles.layout}>
@@ -13,7 +15,7 @@ const Account = () => {
             style={Styles.avatar}
           />
           <Text style={[Styles.text, {fontWeight: 'bold', fontSize: 20}]}>
-            Pham Minh An
+            Nguyen Van A
           </Text>
         </View>
         <View>
@@ -25,10 +27,10 @@ const Account = () => {
             <MaterialIcons name="language" size={24} color={'#FFFFFF'} />
             <Text style={Styles.text}>Language</Text>
           </View>
-          <View style={Styles.row}>
+          <Pressable style={Styles.row} onPress={() => uNavigation.popToTop()}>
             <MaterialIcons name="logout" size={24} color={'#FFFFFF'} />
             <Text style={Styles.text}>Logout</Text>
-          </View>
+          </Pressable>
         </View>
       </View>
     </View>

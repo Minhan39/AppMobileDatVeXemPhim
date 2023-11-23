@@ -40,10 +40,10 @@ const Login = () => {
       };
       const onTabs = () => {
         if (IsVietNamPhoneNumber(phone)) {
-          if (phone == '0394173864' && password == '1234') {
-            uNavigation.navigate('Tabs');
-            setMessage('Login successfull');
+          if (phone == '0394173864' && password == 'abcd@1234') {
+            setMessage('Logout successfull');
             setMessageIcon('check');
+            uNavigation.navigate('Tabs');
           } else {
             setMessage('Login fail');
             setMessageIcon('frown-o');

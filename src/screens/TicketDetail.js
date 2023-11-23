@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -13,8 +13,24 @@ import Header from '../components/Header';
 
 const {width, height} = Dimensions.get('screen');
 
-const TicketDetail = () => {
+const TicketDetail = ({route}) => {
   const uNavigation = useNavigation();
+
+  useEffect(() => {
+    console.log(route.params?.cinema_name);
+    console.log(route.params?.openning_day);
+    console.log(route.params?.show_time);
+    console.log(route.params?.seat);
+    console.log(route.params?.id);
+    console.log(route.params?.movie_image);
+  }, [
+    route.params?.cinema_name,
+    route.params?.openning_day,
+    route.params?.show_time,
+    route.params?.seat,
+    route.params?.id,
+    route.params?.movie_image
+  ])
 
   return (
     <View style={Styles.container}>
@@ -23,11 +39,11 @@ const TicketDetail = () => {
         <View style={Styles.information}>
           <View style={Styles.center}>
             <Text style={Styles.title}>Cinema</Text>
-            <Text style={Styles.text}>CGV squart Binh Duong</Text>
+            <Text style={Styles.text}>{route.params?.cinema_name}</Text>
           </View>
           <View style={Styles.center}>
             <Text style={Styles.title}>Date</Text>
-            <Text style={Styles.text}>24/09/2021</Text>
+            <Text style={Styles.text}>{route.params?.openning_day.split('-')[2]}/{route.params?.openning_day.split('-')[1]}/{route.params?.openning_day.split('-')[0]}</Text>
           </View>
           <View
             style={{
@@ -36,11 +52,11 @@ const TicketDetail = () => {
             }}>
             <View style={Styles.center}>
               <Text style={Styles.title}>Time</Text>
-              <Text style={Styles.text}>18:00</Text>
+              <Text style={Styles.text}>{route.params?.show_time.split(':')[0]}:{route.params?.show_time.split(':')[1]}</Text>
             </View>
             <View style={Styles.center}>
               <Text style={Styles.title}>Seat</Text>
-              <Text style={Styles.text}>7A</Text>
+              <Text style={Styles.text}>{route.params?.seat[0]} - {route.params?.seat[1]}</Text>
             </View>
           </View>
         </View>
@@ -52,7 +68,7 @@ const TicketDetail = () => {
             width: (width * 3) / 5,
           }}></View>
         <ImageBackground
-          source={require('../assets/img/doraemon_vungdatlytuongtrenbautroi.jpg')}
+          source={route.params?.movie_image ? {uri: route.params?.movie_image} : require('../assets/img/doraemon_vungdatlytuongtrenbautroi.jpg')}
           style={Styles.image}
           imageStyle={{
             borderRadius: 8,
@@ -73,7 +89,7 @@ const TicketDetail = () => {
               justifyContent: 'center',
             }}>
             <View style={Styles.qr}>
-              <QRCode value="1234" size={120} />
+              <QRCode value={`${route.params?.id}`} size={120} />
             </View>
           </View>
         </ImageBackground>

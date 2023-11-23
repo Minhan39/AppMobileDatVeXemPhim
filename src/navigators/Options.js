@@ -27,7 +27,8 @@ export default Options = () => {
       />
       <Option.Screen
         name={'CinemaOptions'}
-        component={CinemaOptionsScreen}
+        //component={CinemaOptionsScreen}
+        component={TicketOptionsScreen}
         options={{
           tabBarLabel: 'Cinemas',
           tabBarIcon: ({color}) => (

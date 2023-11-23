@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import PrimaryButton from './PrimaryButton';
 
-const Price = ({price, titleButton, onPress}) => {
+const Price = ({price, titleButton, onPress, disabled}) => {
   return (
     <View style={Styles.footer}>
       <View style={Styles.price}>
@@ -15,6 +15,7 @@ const Price = ({price, titleButton, onPress}) => {
         customStyle={Styles.button}
         value={titleButton}
         onPress={onPress}
+        disabled={disabled}
       />
     </View>
   );

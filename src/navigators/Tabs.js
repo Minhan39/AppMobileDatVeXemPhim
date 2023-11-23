@@ -18,7 +18,7 @@ export default Tabs = () => {
       inactiveColor="#686D76"
       barStyle={{backgroundColor: '#23232e'}}
       shifting={true}
-      initialRouteName={'Tickets'}>
+      initialRouteName={'Home'}>
       <Tab.Screen
         name={'Home'}
         component={HomeScreen}

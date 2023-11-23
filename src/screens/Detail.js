@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -15,22 +16,34 @@ import PrimaryButton from '../components/PrimaryButton';
 
 const {width, height} = Dimensions.get('screen');
 
-const Detail = () => {
+const Detail = ({route}) => {
   const uNavigation = useNavigation();
-  let description = `Nobita, heard by Dekisugi summarizing Thomas More's Utopia describes fantasy land where people live happily without pain or conflict after school asking Doraemon to help him find that ideal country but ignored. He ran to the mountain behind the school and was startled when a blue bug landed on his nose, pushed it aside, and saw something in the sky in the shape of Utopia. Doraemon immediately searched the timeline for information about this phenomenon, thanks to the "Time Report". Then, the group of friends gathered on the mountain behind the school began to search for Utopia with the
-    "Zeppelin Time Airship" from time to time. confirmed above. Nobita's band spent an entire day playing and searching for Utopia but to no avail. That night Nobita saw the so-called Utopia he had seen before. The group of friends let the airship approach, but the group
-    was covered with dark clouds and was suddenly ambushed. The next morning, the Fellowship wakes up, Sonya, the perfect robot cat, apologizes to the group for the raid last night. He also tells the group that they are in Paradapia, an ideal country similar to
-    Utopia, just as Nobita had requested. At Nobita's insistence, Sonya took his group of friends to the Cathedral to ask them to let the three sages Sci, Poli, and Culti, the creators of Paradapia, stay in Paradapia, and he was accepted. Every day, while Nobita, Shizuka, Gian, and Suneo go to the academy to be more "perfect" like the
-    residents there, Doraemon helps Sonya patrol all of Paradapia. Sonya reveals his past to Doraemon as a pet companion cat who was abused and neglected by his former owner before meeting the three sages.`;
-  let actors = `Mizuta Wasabi\nSeki Tomokazu\nKimura Subaru\nOhara Megumi\nKakazu Yumi`;
-  let languages = `Japanese\nEnglish\nVietnamese`;
   const [button, setButton] = useState(true);
+  const [movie, setMovie] = useState({});
+
+  const getMovieFromApi = () => {
+    return fetch(`https://spidercinema.pmandono.com/api/movie/${route.params?.movie_id}`)
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
+    if(route.params?.movie_id){
+      const getMovie = async () => {
+        setMovie(await getMovieFromApi());
+      }
+      getMovie();
+    }
+
     setTimeout(() => {
       setButton(false);
     }, 3000);
-  }, []);
+  }, [route.params?.movie_id]);
 
   return (
     <SafeAreaView style={Styles.container}>
@@ -47,42 +60,62 @@ const Detail = () => {
         />
         <View style={Styles.title}>
           <Text style={Styles.name}>
-            Doraemon Movie 42: Nobita's Sky Utopia (2023)
+            {movie.name}
           </Text>
           <View style={Styles.categories}>
-            <View style={Styles.category}>
-              <Text style={Styles.categoryText}>Anime</Text>
-            </View>
-            <View style={Styles.category}>
-              <Text style={Styles.categoryText}>Fantasy</Text>
-            </View>
+            <FlatList
+              data={movie.category_list ? movie.category_list : []}
+              renderItem={({item}) => (
+                <View style={Styles.category}>
+                  <Text style={Styles.categoryText}>{item}</Text>
+                </View>
+              )}
+              keyExtractor={(item, index) => index}
+              horizontal={true}
+            />
           </View>
         </View>
         <View style={Styles.information}>
           <Image
-            source={require('../assets/img/doraemon_vungdatlytuongtrenbautroi.jpg')}
+            source={movie.image ? {uri: movie.image} : require('../assets/img/doraemon_vungdatlytuongtrenbautroi.jpg')}
             style={Styles.image}
           />
           <Text style={Styles.description}>
-            {description ? `${description.substring(0, 310)}...` : ''}
+            {movie.description ? `${movie.description.substring(0, 310)}...` : ''}
           </Text>
         </View>
-        <View style={Styles.subInformation}>
+        <View>
           <View style={Styles.informationRow}>
             <Text style={[Styles.whiteText, Styles.sWidth]}>Studio</Text>
-            <Text style={Styles.whiteText}>Shin-Ei Animation</Text>
+            <Text style={Styles.whiteText}>{movie.studio}</Text>
           </View>
           <View style={Styles.informationRow}>
             <Text style={[Styles.whiteText, Styles.sWidth]}>Director</Text>
-            <Text style={Styles.whiteText}>Doyama Takumi</Text>
+            <Text style={Styles.whiteText}>{movie.director}</Text>
           </View>
           <View style={Styles.informationRow}>
             <Text style={[Styles.whiteText, Styles.sWidth]}>Actor</Text>
-            <Text style={Styles.whiteText}>{actors}</Text>
+            <FlatList 
+              data={movie.actor_list ? movie.actor_list : []}
+              renderItem={({item}) => (
+                <Text style={Styles.whiteText}>{item}</Text>
+              )}
+              keyExtractor={(item, index) => index}
+              horizontal={false}
+              scrollEnabled={false}
+            />
           </View>
           <View style={Styles.informationRow}>
             <Text style={[Styles.whiteText, Styles.sWidth]}>Language</Text>
-            <Text style={Styles.whiteText}>{languages}</Text>
+            <FlatList 
+              data={movie.language_list ? movie.language_list : []}
+              renderItem={({item}) => (
+                <Text style={Styles.whiteText}>{item}</Text>
+              )}
+              keyExtractor={(item, index) => index}
+              horizontal={false}
+              scrollEnabled={false}
+            />
           </View>
         </View>
       </ScrollView>
@@ -91,7 +124,7 @@ const Detail = () => {
           disabled={button}
           value={'Buy ticket'}
           customStyle={Styles.button}
-          onPress={() => uNavigation.navigate('Options')}
+          onPress={() => uNavigation.navigate('Options', {screen: 'TicketOptions', params: {movie_id: route.params?.movie_id}})}
         />
       </View>
     </SafeAreaView>

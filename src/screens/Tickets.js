@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,29 +12,58 @@ import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Header from '../components/Header';
-import {movies} from '../data/MoviesSchema';
 
 const {width, height} = Dimensions.get('screen');
-const Tickets = () => {
-  const unavigation = useNavigation();
+const Tickets = ({route}) => {
+  const uNavigation = useNavigation();
+  const [tickets, setTickets] = useState([]);
+
+  const getTicketsFromApi = () => {
+    return fetch('https://spidercinema.pmandono.com/api/ticket')
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const getTickets = async () => {
+    setTickets(await getTicketsFromApi());
+  }
+
+  useEffect(() => {
+    getTickets();
+    if(route.params?.refresh){
+      getTickets();
+    }
+  }, [route.params?.refresh]);
 
   return (
     <View style={Styles.container}>
-      <Header uNavigation={unavigation} />
+      <Header uNavigation={uNavigation} />
       <FlatList
-        data={movies}
+        data={tickets ? tickets : []}
         renderItem={({item}) => (
           <Pressable
             style={Styles.ticket}
-            onPress={() => unavigation.navigate('TicketDetail')}>
+            onPress={() => uNavigation.navigate('TicketDetail', {
+              cinema_name: item.cinema_name,
+              openning_day: item.openning_day,
+              show_time: item.show_time,
+              seat: item.seat,
+              id: item.id,
+              movie_image: item.movie_image
+            })}>
             <ImageBackground
-              source={item.src}
+              source={{uri: item.movie_image}}
               style={Styles.image}
               imageStyle={{borderRadius: 8}}>
               <LinearGradient
                 start={{x: 0.5, y: 0}}
                 end={{x: 1, y: 0}}
-                colors={['rgba(9, 140, 208, 0)', 'rgba(9, 140, 208, 1)']}
+                colors={['rgba(9, 140, 208, 0)', 'rgba(255, 255, 255, 1)']}
                 style={Styles.linear}></LinearGradient>
               <View style={Styles.circle1}></View>
               <View style={Styles.circle2}></View>
@@ -42,22 +71,22 @@ const Tickets = () => {
             </ImageBackground>
             <View
               style={{
-                backgroundColor: '#098CD0',
+                backgroundColor: '#fff',
                 justifyContent: 'space-evenly',
               }}>
               <View>
                 <Text style={Styles.text}>
-                  <FontAwesome name="map-marker" size={16} color={'#FFFFFF'} />{' '}
-                  {item.cinema}
+                  <FontAwesome name="map-marker" size={16} color={'#000'} />{' '}
+                  {item.cinema_name}
                 </Text>
                 <Text style={[Styles.text, {fontSize: 12}]}>
-                  <FontAwesome name="calendar" size={12} color={'#FFFFFF'} />{' '}
-                  {item.time}
+                  <FontAwesome name="calendar" size={12} color={'#000'} />{' '}
+                  {item.show_time.split(':')[0]} : {item.show_time.split(':')[1]} - {item.openning_day.split('-')[2]}/{item.openning_day.split('-')[1]}/{item.openning_day.split('-')[0]}
                 </Text>
               </View>
               <Text style={Styles.text}>
                 <Text style={{fontWeight: 'bold', fontSize: 16}}>
-                  {item.price}
+                  {(Number(item.movie_price) + Number(item.combo_price) * Number(item.number_combos)) * (1 + item.vat/100)}
                 </Text>
                 đ
               </Text>
@@ -78,7 +107,7 @@ const Styles = StyleSheet.create({
   ticket: {
     flexDirection: 'row',
     width: width - 32,
-    backgroundColor: '#098CD0',
+    backgroundColor: '#fff',
     marginHorizontal: 16,
     justifyContent: 'space-between',
     paddingRight: 16,
@@ -94,7 +123,7 @@ const Styles = StyleSheet.create({
     height: 96,
   },
   text: {
-    color: '#FFFFFF',
+    color: '#000',
     textAlign: 'right',
   },
   circle1: {

@@ -17,8 +17,8 @@ const Category = () => {
   const uNavigation = useNavigation();
   const [categories, setCategories] = useState([]);
 
-  const getMoviesFromApi = () => {
-    return fetch('https://5259-115-75-187-3.ngrok-free.app/api/categories')
+  const getCategoriesFromApi = () => {
+    return fetch('https://spidercinema.pmandono.com/api/category')
       .then(response => response.json())
       .then(json => {
         return json;
@@ -29,10 +29,11 @@ const Category = () => {
   };
 
   useEffect(() => {
-    setTimeout(async () => {
-      setCategories(await getMoviesFromApi());
-    }, 1000);
-  });
+    const getCategories = async () => {
+      setCategories(await getCategoriesFromApi());
+    }
+    getCategories();
+  }, []);
 
   return (
     <View style={Styles.container}>
@@ -42,10 +43,11 @@ const Category = () => {
         renderItem={({item}) => (
           <Pressable
             style={Styles.category}
-            onPress={() => uNavigation.navigate('MovieList')}>
+            onPress={() => uNavigation.navigate('MovieList',{category_id: item.id})
+            }>
             <View style={Styles.icon}>
               {item.image == '' ? (
-                <></>
+                <View></View>
               ) : (
                 <Image
                   source={{uri: item.image}}
@@ -53,7 +55,7 @@ const Category = () => {
                 />
               )}
             </View>
-            <Text style={Styles.name}>{item.name}</Text>
+            <Text style={[Styles.name, {fontSize: item.name.length >= 10 ? 12 : 14}]}>{item.name}</Text>
           </Pressable>
         )}
         keyExtractor={item => item.id}

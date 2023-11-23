@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -11,11 +11,45 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {categories} from '../data/CategoriesSchema';
-import {themedMovies} from '../data/ThemedMoviesSchema';
 
 const Home = () => {
   const uNavigation = useNavigation();
+  const [categories, setCategories] = useState([]);
+  const [movies, setMovies] = useState([]);
+
+  const getCategoriesFromApi = () => {
+    return fetch('https://spidercinema.pmandono.com/api/category')
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const getMoviesFromApi = () => {
+    return fetch('https://spidercinema.pmandono.com/api/category/movie')
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      setCategories(await getCategoriesFromApi());
+    };
+    const getMovies = async () => {
+      setMovies(await getMoviesFromApi());
+    }
+    getCategories();
+    getMovies();
+  },[]);
+
   const Header = ({uNavigation}) => {
     return (
       <View style={Styles.header}>
@@ -34,13 +68,20 @@ const Home = () => {
     );
   };
   const Categories = ({uNavigation}) => {
-    const CategoryItem = ({icon, title}) => {
+    const CategoryItem = ({image, name, id}) => {
       return (
         <Pressable
           style={Styles.category}
-          onPress={() => uNavigation.navigate('MovieList')}>
-          {icon}
-          <Text style={{color: '#FFFFFF'}}>{title}</Text>
+          onPress={() => uNavigation.navigate('MovieList', {category_id: id})}>
+          {image == '' ? (
+            <View></View>
+          ) : (
+            <Image
+              source={{uri: image}}
+              style={{width: 36, height: 36}}
+            />
+          )}
+          <Text style={{color: '#FFFFFF', fontSize: name.length >= 10 ? 10 : 11}}>{name}</Text>
         </Pressable>
       );
     };
@@ -54,9 +95,9 @@ const Home = () => {
         </View>
         <FlatList
           horizontal={true}
-          data={categories ? categories : []}
+          data={categories ? categories.slice(0,6) : []}
           renderItem={({item}) => (
-            <CategoryItem icon={item.icon} title={item.title} />
+            <CategoryItem image={item.image} name={item.name} id={item.id}/>
           )}
           keyExtractor={item => item.id}
         />
@@ -67,7 +108,7 @@ const Home = () => {
     return (
       <View>
         <View style={Styles.slideshow}>
-          <Pressable onPress={() => uNavigation.navigate('Detail')}>
+          <Pressable onPress={() => uNavigation.navigate('Detail', {movie_id: 2})}>
             <Image
               style={Styles.slide}
               source={require('../assets/img/doraemon_vungdatlytuongtrenbautroi.jpg')}
@@ -75,17 +116,17 @@ const Home = () => {
           </Pressable>
         </View>
         <FlatList
-          data={themedMovies ? themedMovies : []}
+          data={categories ? categories.slice(0, 3) : []}
           renderItem={({item}) => (
             <View>
               <View style={Styles.title}>
-                <Text style={Styles.titleText}>{item.categoryName}</Text>
+                <Text style={Styles.titleText}>{item.name}</Text>
               </View>
               <FlatList
-                data={item.data ? item.data : []}
+                data={movies[item.id] ? movies[item.id] : []}
                 renderItem={({item}) => (
-                  <Pressable onPress={() => uNavigation.navigate('Detail')}>
-                    <Image style={Styles.image} source={item.src} />
+                  <Pressable onPress={() => uNavigation.navigate('Detail', {movie_id: item.id})}>
+                    <Image style={Styles.image} source={{uri: item.image}} />
                   </Pressable>
                 )}
                 keyExtractor={item => item.id}
@@ -173,6 +214,7 @@ const Styles = StyleSheet.create({
   titleText: {
     color: '#FFFFFF',
     paddingVertical: 8,
+    textTransform: 'uppercase'
   },
   image: {
     width: 88,
